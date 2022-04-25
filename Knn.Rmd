@@ -1,0 +1,75 @@
+---
+title: "Homework 3"
+author: "Troy Mullenberg"
+date: "4/25/2022"
+output:
+  html_document:
+    df_print: paged
+  word_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+```
+
+Lets first get the data!
+```{r import data}
+library(caret)
+
+Spotify = read.csv("SpotifyFeatureEngineeredCSV.csv")
+drops = c("artist_name","track_name", "track_id", "ï..genre", "key", "mode", "time_signature")
+df = Spotify[ , !(names(Spotify) %in% drops)]
+
+set.seed(2022)
+indexes = createDataPartition(df$popularity, p = .85, list = F)
+train = df[indexes, ]
+test = df[-indexes, ]
+
+train_x = train[, -14]
+train_x = scale(train_x)[,]
+train_y = train[,14]
+hist(train_x, xlim=c(-5,5), breaks=100)
+
+test_x = test[, -14]
+test_x = scale(test[,-14])[,]
+test_y = test[,14]
+
+summary(df)
+
+```
+Lets Now make a Knn map of the data!
+
+```{r}
+library(class);
+
+knnmodel = knnreg(train_x, train_y)
+str(knnmodel)
+
+```
+```{r}
+pred_y = predict(knnmodel, data.frame(test_x))
+
+print(data.frame(test_y, pred_y))
+
+mse = mean((test_y - pred_y)^2)
+mae = caret::MAE(test_y, pred_y)
+rmse = caret::RMSE(test_y, pred_y)
+
+cat("MSE: ", mse, "MAE: ", mae, " RMSE: ", rmse)
+table(pred_y, test_y)
+
+
+```
+```{r}
+x = 1:10
+
+
+plot(x, test_y[0:length(x)], col = "red",
+     main = "Spotify Popularity test data Perdiction")
+points(x, pred_y[0:length(x)], col = "blue", lwd=2)
+       fill = c("red", "blue"), col = 2:3,  adj = c(0, 0.6))
+grid()
+```
+
+
