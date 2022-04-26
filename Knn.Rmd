@@ -14,11 +14,12 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 Lets first get the data!
+
 ```{r import data}
 library(caret)
 
 Spotify = read.csv("SpotifyFeatureEngineeredCSV.csv")
-drops = c("artist_name","track_name", "track_id", "ï..genre", "key", "mode", "time_signature")
+drops = c("artist_name","track_name", "track_id", "genre", "key", "mode", "time_signature")
 df = Spotify[ , !(names(Spotify) %in% drops)]
 
 set.seed(2022)
@@ -37,7 +38,18 @@ test_y = test[,14]
 
 summary(df)
 
+
 ```
+```{r}
+library(ggbiplot)
+dta = prcomp(df, center=TRUE, scale=TRUE)
+summary(dta)
+str(dta)
+ggbiplot(dta, labels.size = 5)
+
+
+```
+
 Lets Now make a Knn map of the data!
 
 ```{r}
@@ -47,6 +59,7 @@ knnmodel = knnreg(train_x, train_y)
 str(knnmodel)
 
 ```
+
 ```{r}
 pred_y = predict(knnmodel, data.frame(test_x))
 
@@ -67,7 +80,9 @@ bintestpred_y[pred_y > 0.46] <- 1;
 table(bintesty,bintestpred_y)
 
 ```
+
 This is text in between
+
 ```{r}
 x = 1:10
 plot(x, test_y[1:length(x)], col = "red",
@@ -88,7 +103,9 @@ legend("topright",  legend = c("original-medv", "predicted-medv"),
        fill = c("red", "blue"), col = 2:3,  adj = c(0, 0.6))
 grid()
 ```
+
 more text
+
 ```{r}
 library(ggplot2)
 library(ggrepel)
@@ -96,21 +113,8 @@ library(cowplot)
 
 library(plspm)
 
-updateR()
+
 
 ```
-text
-```{r}
-# installing/loading the package:
-if(!require(installr)) {
-  install.packages("installr"); 
-  require(installr)
-} #load / install+load installr
-
-# using the package:
-updateR()
-```
-
-
 
 
