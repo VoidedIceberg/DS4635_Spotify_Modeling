@@ -57,19 +57,60 @@ mae = caret::MAE(test_y, pred_y)
 rmse = caret::RMSE(test_y, pred_y)
 
 cat("MSE: ", mse, "MAE: ", mae, " RMSE: ", rmse)
-table(pred_y, test_y)
 
+bintesty = c(0,length(test_y));
+bintestpred_y = c(0,length(pred_y));
+
+bintesty[test_y > 0.46] <- 1;
+bintestpred_y[pred_y > 0.46] <- 1;
+
+table(bintesty,bintestpred_y)
 
 ```
+This is text in between
 ```{r}
 x = 1:10
-
-
-plot(x, test_y[0:length(x)], col = "red",
+plot(x, test_y[1:length(x)], col = "red",
      main = "Spotify Popularity test data Perdiction")
-points(x, pred_y[0:length(x)], col = "blue", lwd=2)
+points(x, pred_y[1:length(x)], col = "blue", lwd=2)
+legend("topright",  legend = c("original-medv", "predicted-medv"), 
        fill = c("red", "blue"), col = 2:3,  adj = c(0, 0.6))
 grid()
 ```
+
+```{r}
+x = 1:length(test_y)
+
+plot(x, test_y, col = "red", type = "l", lwd=2,
+     main = "Spotify Popularity test data Perdiction")
+lines(x, pred_y, col = "blue", lwd=2)
+legend("topright",  legend = c("original-medv", "predicted-medv"), 
+       fill = c("red", "blue"), col = 2:3,  adj = c(0, 0.6))
+grid()
+```
+more text
+```{r}
+library(ggplot2)
+library(ggrepel)
+library(cowplot)
+
+library(plspm)
+
+updateR()
+
+```
+text
+```{r}
+# installing/loading the package:
+if(!require(installr)) {
+  install.packages("installr"); 
+  require(installr)
+} #load / install+load installr
+
+# using the package:
+updateR()
+```
+
+
 
 
